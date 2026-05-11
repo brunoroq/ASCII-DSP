@@ -32,6 +32,11 @@ target_sources(ASCII_DSP
         Source/PluginEditor.cpp
 )
 
+juce_add_binary_data(ASCIIDSPAssets
+    SOURCES
+        Assets/character.png
+)
+
 target_compile_definitions(ASCII_DSP
     PUBLIC
         JUCE_WEB_BROWSER=0
@@ -41,4 +46,5 @@ target_compile_definitions(ASCII_DSP
 target_link_libraries(ASCII_DSP
     PRIVATE
         juce::juce_audio_utils
+        ASCIIDSPAssets
 )

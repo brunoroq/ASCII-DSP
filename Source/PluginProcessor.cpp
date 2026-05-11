@@ -84,3 +84,8 @@ float ASCIIDSPAudioProcessor::getRMSValue() const
 {
     return rmsValue;
 }
+
+juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
+{
+    return new ASCIIDSPAudioProcessor();
+}

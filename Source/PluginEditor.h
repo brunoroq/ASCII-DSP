@@ -16,7 +16,10 @@ private:
     void timerCallback() override;
 
     ASCIIDSPAudioProcessor& audioProcessor;
+
     float currentRMS = 0.0f;
+
+    juce::Image characterImage;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ASCIIDSPAudioProcessorEditor)
 };
