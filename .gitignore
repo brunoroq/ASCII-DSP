@@ -1,0 +1,8 @@
+Builds/
+.vscode/
+*.o
+*.a
+*.so
+*.vst3
+*.swp
+.DS_Store
