@@ -18,8 +18,13 @@ private:
     ASCIIDSPAudioProcessor& audioProcessor;
 
     float currentRMS = 0.0f;
+    juce::StringArray asciiNormal;
+    juce::StringArray asciiInvert;
+    juce::StringArray asciiHeavy;
 
+    void generateAsciiVariants();
     juce::Image characterImage;
+    
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (ASCIIDSPAudioProcessorEditor)
 };
