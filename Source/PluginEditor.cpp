@@ -34,15 +34,15 @@ void ASCIIDSPAudioProcessorEditor::generateAsciiVariants()
         return;
 
     // Character sets for brightness mapping
-    juce::String normalChars = " .:-=+*#%@";
-    juce::String heavyChars  = "  ..::--==++**##%%@@";
+    String normalChars = " .:-=+*#%@";
+    String heavyChars  = "  ..::--==++**##%%@@";
 
     // Get original image dimensions
     int imgWidth = characterImage.getWidth();
     int imgHeight = characterImage.getHeight();
 
     // Calculate scale to fit image into the rectangular ASCII grid with letterbox
-    float scale = juce::jmin((float)ASCII_COLUMNS / imgWidth, (float)ASCII_ROWS / imgHeight);
+    float scale = jmin((float)ASCII_COLUMNS / imgWidth, (float)ASCII_ROWS / imgHeight);
 
     // Calculate scaled dimensions and offset for centering (letterbox)
     int scaledWidth = (int)(imgWidth * scale);
@@ -70,8 +70,8 @@ void ASCIIDSPAudioProcessorEditor::generateAsciiVariants()
                 int imgY = (int)((gridY - offsetY) / scale);
 
                 // Clamp to image bounds
-                imgX = juce::jlimit(0, imgWidth - 1, imgX);
-                imgY = juce::jlimit(0, imgHeight - 1, imgY);
+                imgX = jlimit(0, imgWidth - 1, imgX);
+                imgY = jlimit(0, imgHeight - 1, imgY);
 
                 // Sample pixel and calculate brightness
                 auto pixel = characterImage.getPixelAt(imgX, imgY);
@@ -83,12 +83,12 @@ void ASCIIDSPAudioProcessorEditor::generateAsciiVariants()
                 brightness = 1.0f;
             }
 
-            brightness = juce::jlimit(0.0f, 1.0f, brightness);
+            brightness = jlimit(0.0f, 1.0f, brightness);
 
             // Stable dithering keeps the ASCII from forming hard horizontal bands.
             const float ditherStrength = 0.12f;
-            brightness = juce::jlimit(0.0f, 1.0f,
-                                      brightness + (getOrderedDither (gridX, gridY) * ditherStrength));
+            brightness = jlimit(0.0f, 1.0f,
+                                brightness + (getOrderedDither (gridX, gridY) * ditherStrength));
 
             // Map brightness to character indices
             int normalIndex = (int)(brightness * (normalChars.length() - 1));
@@ -129,20 +129,20 @@ ASCIIDSPAudioProcessorEditor::~ASCIIDSPAudioProcessorEditor()
 
 void ASCIIDSPAudioProcessorEditor::paint (Graphics& g)
 {
-    g.fillAll(juce::Colours::black);
+    g.fillAll(Colours::black);
 
     // Normalize audio level and map to 0-1 range
     float audio = std::sqrt(currentRMS) * 2.5f;
-    audio = juce::jlimit(0.0f, 1.0f, audio);
+    audio = jlimit(0.0f, 1.0f, audio);
 
     // Calculate centered square canvas
-    int squareSize = juce::jmin(getWidth(), getHeight()) - (2 * MARGIN);
-    squareSize = juce::jmax(squareSize, 100); // Ensure minimum size
+    int squareSize = jmin(getWidth(), getHeight()) - (2 * MARGIN);
+    squareSize = jmax(squareSize, 100); // Ensure minimum size
 
     int squareX = (getWidth() - squareSize) / 2;
     int squareY = (getHeight() - squareSize) / 2;
 
-    juce::Rectangle<int> asciiArea(squareX, squareY, squareSize, squareSize);
+    Rectangle<int> asciiArea(squareX, squareY, squareSize, squareSize);
 
     // Select ASCII variant based on audio level
     const auto& lines = audio > HEAVY_THRESHOLD ? asciiHeavy : asciiNormal;
@@ -153,11 +153,11 @@ void ASCIIDSPAudioProcessorEditor::paint (Graphics& g)
 
     // Fit the rectangular text block into the square area.
     // Rows define vertical spacing; columns define the visual width.
-    int lineHeight = juce::jmax(1, (asciiArea.getHeight() - (2 * PADDING)) / ASCII_ROWS);
+    int lineHeight = jmax(1, (asciiArea.getHeight() - (2 * PADDING)) / ASCII_ROWS);
     float fontSize = lineHeight * FONT_SIZE_FACTOR;
 
     // Estimate the drawn width of one monospace character so the block can be centered.
-    int charWidth = juce::jmax(1, (int) std::round(fontSize * 0.60f));
+    int charWidth = jmax(1, (int) std::round(fontSize * 0.60f));
     int asciiWidth = ASCII_COLUMNS * charWidth;
     int asciiHeight = ASCII_ROWS * lineHeight;
 
@@ -165,11 +165,11 @@ void ASCIIDSPAudioProcessorEditor::paint (Graphics& g)
     int startY = asciiArea.getY() + (asciiArea.getHeight() - asciiHeight) / 2;
 
     // Calculate color brightness based on audio level
-    int colorBrightness = juce::jlimit(35, 190, (int)(55 + audio * 135));
-    g.setColour(juce::Colour(colorBrightness, colorBrightness, colorBrightness));
+    int colorBrightness = jlimit(35, 190, (int)(55 + audio * 135));
+    g.setColour(Colour(colorBrightness, colorBrightness, colorBrightness));
 
     // Set monospaced font explicitly
-    g.setFont(juce::FontOptions(fontSize).withName("Courier New"));
+    g.setFont(FontOptions(fontSize).withName("Courier New"));
 
     // Draw each line of ASCII art
     for (int i = 0; i < lines.size(); ++i)
@@ -182,7 +182,7 @@ void ASCIIDSPAudioProcessorEditor::paint (Graphics& g)
             yPos,
             asciiWidth,
             lineHeight,
-            juce::Justification::centred
+            Justification::centred
         );
     }
 }
