@@ -1,10 +1,12 @@
 #include "PluginProcessor.h"
 #include "PluginEditor.h"
 
+using namespace juce;
+
 ASCIIDSPAudioProcessor::ASCIIDSPAudioProcessor()
      : AudioProcessor (BusesProperties()
-                     .withInput  ("Input",  juce::AudioChannelSet::stereo(), true)
-                     .withOutput ("Output", juce::AudioChannelSet::stereo(), true))
+                     .withInput  ("Input",  AudioChannelSet::stereo(), true)
+                     .withOutput ("Output", AudioChannelSet::stereo(), true))
 {
 }
 
@@ -12,7 +14,7 @@ ASCIIDSPAudioProcessor::~ASCIIDSPAudioProcessor()
 {
 }
 
-const juce::String ASCIIDSPAudioProcessor::getName() const
+const String ASCIIDSPAudioProcessor::getName() const
 {
     return JucePlugin_Name;
 }
@@ -25,8 +27,8 @@ double ASCIIDSPAudioProcessor::getTailLengthSeconds() const { return 0.0; }
 int ASCIIDSPAudioProcessor::getNumPrograms() { return 1; }
 int ASCIIDSPAudioProcessor::getCurrentProgram() { return 0; }
 void ASCIIDSPAudioProcessor::setCurrentProgram (int index) {}
-const juce::String ASCIIDSPAudioProcessor::getProgramName (int index) { return {}; }
-void ASCIIDSPAudioProcessor::changeProgramName (int index, const juce::String& newName) {}
+const String ASCIIDSPAudioProcessor::getProgramName (int index) { return {}; }
+void ASCIIDSPAudioProcessor::changeProgramName (int index, const String& newName) {}
 
 void ASCIIDSPAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
@@ -41,10 +43,10 @@ bool ASCIIDSPAudioProcessor::isBusesLayoutSupported (const BusesLayout& layouts)
     return true;
 }
 
-void ASCIIDSPAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer,
-                                           juce::MidiBuffer&)
+void ASCIIDSPAudioProcessor::processBlock (AudioBuffer<float>& buffer,
+                                           MidiBuffer&)
 {
-    juce::ScopedNoDenormals noDenormals;
+    ScopedNoDenormals noDenormals;
 
     float sum = 0.0f;
     int numSamples = buffer.getNumSamples();
@@ -67,12 +69,12 @@ bool ASCIIDSPAudioProcessor::hasEditor() const
     return true;
 }
 
-juce::AudioProcessorEditor* ASCIIDSPAudioProcessor::createEditor()
+AudioProcessorEditor* ASCIIDSPAudioProcessor::createEditor()
 {
     return new ASCIIDSPAudioProcessorEditor (*this);
 }
 
-void ASCIIDSPAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
+void ASCIIDSPAudioProcessor::getStateInformation (MemoryBlock& destData)
 {
 }
 
@@ -85,7 +87,7 @@ float ASCIIDSPAudioProcessor::getRMSValue() const
     return rmsValue;
 }
 
-juce::AudioProcessor* JUCE_CALLTYPE createPluginFilter()
+AudioProcessor* JUCE_CALLTYPE createPluginFilter()
 {
     return new ASCIIDSPAudioProcessor();
 }
